@@ -11,7 +11,7 @@ from requests.exceptions import ConnectionError
 from sense_hat import SenseHat
 from threading import Thread
 from time import sleep
-from yaml import load
+from yaml import load, YAMLError
 
 
 class PiEnviro(object):
@@ -262,16 +262,18 @@ class PiEnviro(object):
         filename, which should be located in /scripts directory.
         '''
         post_url=''
-        with open(join(dirname(__file__), influxdb_config)) as config_file:
-            try:
+        try:
+            with open(join(dirname(__file__), influxdb_config)) as config_file:
                 config = load(config_file) # expected: url, db -- optional: username, password
                 if 'username' in config and 'password' in config:
                     post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
                 else: # no credentials needed
                     post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
-            except yaml.YAMLError as err:
-                logging.fatal('Could not create InfluxDB post url path, invalid config file found (config: {config_path})'.format(config_path=influxdb_config))
-        print('Generated InfluxDB POST URL: {}'.format(post_url))
+        except IOError:
+            print('Could not create InfluxDB post url path, no config file found! config: {}'.format(influxdb_config))
+        except YAMLError:
+            print('Could not create InfluxDB post url path, invalid config file found! config: {}'.format(influxdb_config))
+        print('Generated InfluxDB post url: {}'.format(post_url))
         return post_url
 
     def _init_influxdb_thread(self, influxdb_config, start_thread=False):
@@ -296,7 +298,7 @@ class PiEnviro(object):
             try:
                 post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
                 post_resp = post(post_url, data=post_data)
-            except ConnectionError as err:
+            except ConnectionError:
                 print('{} Failed to post InfluxDB update to "env_data" series!'.format(str(datetime.now())))
                 continue
             sleep(self._post_influxdb_wait_sec)
