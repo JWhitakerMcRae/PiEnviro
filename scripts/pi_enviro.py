@@ -296,7 +296,7 @@ class PiEnviro(object):
             try:
                 post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
                 post_resp = post(post_url, data=post_data)
-            except ConnectionError, MissingSchema:
+            except (ConnectionError, MissingSchema):
                 print('{} Failed to post InfluxDB update to "env_data" series!'.format(str(datetime.now())))
                 continue
             sleep(self._post_influxdb_wait_sec)
