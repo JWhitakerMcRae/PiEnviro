@@ -291,9 +291,9 @@ class PiEnviro(object):
         :param influxdb_config: String containing InfluxDB config
         filename, which should be located in /scripts directory.
         """
+        post_url = self.generate_influxdb_post_url(influxdb_config) # only need to generate this once
         while True:
             try:
-                post_url = self.generate_influxdb_post_url(influxdb_config)
                 post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
                 post_resp = post(post_url, data=post_data)
             except ConnectionError as CE:
