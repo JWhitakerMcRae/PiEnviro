@@ -312,6 +312,6 @@ class PiEnviro(object):
 
 
 if __name__ == '__main__':
-    pi = PiEnviro(influxdb_config='aws_influxdb.yml') # initialize PiEnviro (using personal database)
+    pi = PiEnviro(influxdb_config='jwm_influxdb.yml') # initialize PiEnviro (using personal database)
     pi.run()
     print('*** PiEnviro initialized! ***')
