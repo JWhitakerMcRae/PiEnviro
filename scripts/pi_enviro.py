@@ -60,7 +60,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
-        self._screen_message = 'Hello World!'
+        self._screen_message = '' # This is set by _update_screen_message
         self._screen_speed = 0.1
         self._screen_text_color = self.pink
         self._screen_background_color = self.black
