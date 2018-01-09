@@ -7,7 +7,7 @@ from pint import UnitRegistry
 from pint.converters import ScaleConverter
 from pint.unit import UnitDefinition
 from requests import post
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, MissingSchema
 from sense_hat import SenseHat
 from threading import Thread
 from time import sleep
@@ -269,10 +269,8 @@ class PiEnviro(object):
                     post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
                 else: # no credentials needed
                     post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
-        except IOError:
-            print('Could not create InfluxDB post url path, no config file found! config: {}'.format(influxdb_config))
-        except YAMLError:
-            print('Could not create InfluxDB post url path, invalid config file found! config: {}'.format(influxdb_config))
+        except IOError, YAMLError:
+            print('Could not create InfluxDB post url path, invalid config file ({})!'.format(influxdb_config))
         print('Generated InfluxDB post url: {}'.format(post_url))
         return post_url
 
@@ -298,7 +296,7 @@ class PiEnviro(object):
             try:
                 post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
                 post_resp = post(post_url, data=post_data)
-            except ConnectionError:
+            except ConnectionError, MissingSchema:
                 print('{} Failed to post InfluxDB update to "env_data" series!'.format(str(datetime.now())))
                 continue
             sleep(self._post_influxdb_wait_sec)
