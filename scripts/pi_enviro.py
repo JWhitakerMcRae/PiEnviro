@@ -41,7 +41,7 @@ class PiEnviro(object):
         self._temp_thread = self._init_temp_thread()
         self._humidity_thread = self._init_humidity_thread()
         self._press_thread = self._init_press_thread()
-        #FIXME self._influxdb_thread = self._init_influxdb_thread()
+        self._influxdb_thread = self._init_influxdb_thread()
 
     def _init_defaults(self):
         """
@@ -271,9 +271,9 @@ class PiEnviro(object):
     def _influxdb_thread(self):
         """
         InfluxDB update thread loop.
-        TODO: Allow dynamic configuration of the hardcoded url + data (series name) strings in this method, remove hardcoded subnet check
+        TODO: Allow dynamic configuration of data (series name) strings in this method
         """
-        while '10.10.10' in self._get_ipaddr(): # Gooee Test Centre subnet
+        while True:
             try:
                 post_url = self.generate_influxdb_post_url()
                 post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
