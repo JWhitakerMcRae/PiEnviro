@@ -2,6 +2,7 @@
 from datetime import datetime
 from netifaces import ifaddresses, AF_INET
 from os import popen
+from os.path import dirname, join
 from pint import UnitRegistry
 from pint.converters import ScaleConverter
 from pint.unit import UnitDefinition
@@ -10,6 +11,7 @@ from requests.exceptions import ConnectionError
 from sense_hat import SenseHat
 from threading import Thread
 from time import sleep
+from yaml import load
 
 
 class PiEnviro(object):
@@ -30,9 +32,11 @@ class PiEnviro(object):
 
     ####################################################################
 
-    def __init__(self):
+    def __init__(self, influxdb_config=None):
         """
         Constructor.
+        :param influxdb_config: String containing InfluxDB config
+        filename, which should be located in /scripts directory.
         """
         self._init_defaults()
         self._init_sense_hat()
@@ -41,7 +45,7 @@ class PiEnviro(object):
         self._temp_thread = self._init_temp_thread()
         self._humidity_thread = self._init_humidity_thread()
         self._press_thread = self._init_press_thread()
-        self._influxdb_thread = self._init_influxdb_thread()
+        if influxdb_config: self._influxdb_thread = self._init_influxdb_thread(influxdb_config) # only initialize this thread if config is passed in
 
     def _init_defaults(self):
         """
@@ -56,7 +60,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
-        self._screen_message = 'Gooee: Making Smart Simple'
+        self._screen_message = 'Hello World!'
         self._screen_speed = 0.1
         self._screen_text_color = self.pink
         self._screen_background_color = self.black
@@ -68,7 +72,7 @@ class PiEnviro(object):
         # Initialize SenseHat object
         self._sense_hat = SenseHat()
         self._sense_hat.low_light = True # make screen a little dimmer
-        self._sense_hat.set_rotation(270) # set rotation for vertical, with USB ports down
+        self._sense_hat.set_rotation(180) # set rotation for horizontal, with power supple in the back
         # Initialize environment defaults
         self.curr_temp = self._read_temp()
         self.curr_humidity = self._read_humidity()
@@ -76,17 +80,15 @@ class PiEnviro(object):
 
     ####################################################################
 
-    def run(self, start_influxdb=True):
+    def run(self):
         """
         Run application, which starts all initialized threads.
-        :param start_influxdb: If True will also start thread to
-        continuously post to InfluxDB database (hardcoded!).
         """
         self._screen_thread.start()
         self._temp_thread.start()
         self._humidity_thread.start()
         self._press_thread.start()
-        if start_influxdb: self._influxdb_thread.start()
+        if hasattr(self, '_influxdb_thread'): self._influxdb_thread.start() # only start this thread if it was initialized
 
     ####################################################################
 
@@ -253,29 +255,45 @@ class PiEnviro(object):
 
     ####################################################################
 
-    def generate_influxdb_post_url(self):
+    def generate_influxdb_post_url(self, influxdb_config):
         '''
-        FIXME
+        Read config file to generate and return InfluxDB POST URL.
+        :param influxdb_config: String containing InfluxDB config
+        filename, which should be located in /scripts directory.
         '''
-        return 'https://dev-influxdb.gooee.io:8086/write?db=tc2&u=gandytest&p=w3l0v3BIGdata' # Gooee Test Center InfluxDB instance
+        post_url=''
+        with open(join(dirname(__file__), influxdb_config)) as config_file:
+            try:
+                config = load(config_file) # expected: url, db -- optional: username, password
+                if 'username' in config and 'password' in config:
+                    post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
+                else: # no credentials needed
+                    post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
+            except yaml.YAMLError as err:
+                logging.fatal('Could not create InfluxDB post url path, invalid config file found (config: {config_path})'.format(config_path=influxdb_config))
+        print('Generated InfluxDB POST URL: {}'.format(post_url))
+        return post_url
 
-    def _init_influxdb_thread(self, start_thread=False):
+    def _init_influxdb_thread(self, influxdb_config, start_thread=False):
         """
         Initialize InfluxDB update thread and return it.
+        :param influxdb_config: String containing InfluxDB config
+        filename, which should be located in /scripts directory.
         :param start_thread: If True will also start thread.
         """
-        influxdb_thread = Thread(target=self._influxdb_thread)
+        influxdb_thread = Thread(target=self._influxdb_thread, args=[influxdb_config])
         if start_thread: influxdb_thread.start()
         return influxdb_thread
 
-    def _influxdb_thread(self):
+    def _influxdb_thread(self, influxdb_config):
         """
         InfluxDB update thread loop.
-        TODO: Allow dynamic configuration of data (series name) strings in this method
+        :param influxdb_config: String containing InfluxDB config
+        filename, which should be located in /scripts directory.
         """
         while True:
             try:
-                post_url = self.generate_influxdb_post_url()
+                post_url = self.generate_influxdb_post_url(influxdb_config)
                 post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
                 post_resp = post(post_url, data=post_data)
             except ConnectionError as CE:
@@ -294,6 +312,6 @@ class PiEnviro(object):
 
 
 if __name__ == '__main__':
-    pi = PiEnviro() # initialize PiEnviro
+    pi = PiEnviro(influxdb_config='aws_influxdb.yml') # initialize PiEnviro (using personal database)
     pi.run()
     print('*** PiEnviro initialized! ***')

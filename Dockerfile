@@ -22,7 +22,8 @@ RUN apt-get update && apt-get -y install \
 RUN pip install -U \
     flask \
     netifaces \
-    pint
+    pint \
+    PyYAML
 
 # Add user credentials
 RUN useradd -m "pienviro" && \
@@ -30,7 +31,7 @@ RUN useradd -m "pienviro" && \
     echo "pienviro:pienviro1!" | chpasswd
 
 # Setup app environment
-COPY start.sh scripts/* /app/
+COPY start.sh config/* scripts/* /app/
 RUN chmod 744 /app/start.sh
 
 # Start app
