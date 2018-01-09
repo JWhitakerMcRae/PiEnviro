@@ -41,11 +41,11 @@ class PiEnviro(object):
         self._init_defaults()
         self._init_sense_hat()
         # Initialize control threads
-        self._screen_thread = self._init_screen_thread()
-        self._temp_thread = self._init_temp_thread()
-        self._humidity_thread = self._init_humidity_thread()
-        self._press_thread = self._init_press_thread()
-        if influxdb_config: self._influxdb_thread = self._init_influxdb_thread(influxdb_config) # only initialize this thread if config is passed in
+        self._screen_thread_obj = self._init_screen_thread()
+        self._temp_thread_obj = self._init_temp_thread()
+        self._humidity_thread_obj = self._init_humidity_thread()
+        self._press_thread_obj = self._init_press_thread()
+        if influxdb_config: self._influxdb_thread_obj = self._init_influxdb_thread(influxdb_config) # only initialize this thread if config is passed in
 
     def _init_defaults(self):
         """
@@ -84,11 +84,11 @@ class PiEnviro(object):
         """
         Run application, which starts all initialized threads.
         """
-        self._screen_thread.start()
-        self._temp_thread.start()
-        self._humidity_thread.start()
-        self._press_thread.start()
-        if hasattr(self, '_influxdb_thread'): self._influxdb_thread.start() # only start this thread if it was initialized
+        self._screen_thread_obj.start()
+        self._temp_thread_obj.start()
+        self._humidity_thread_obj.start()
+        self._press_thread_obj.start()
+        if hasattr(self, '_influxdb_thread_obj'): self._influxdb_thread_obj.start() # only start this thread if it was initialized
 
     ####################################################################
 

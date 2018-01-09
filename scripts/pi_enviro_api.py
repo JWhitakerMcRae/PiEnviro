@@ -4,7 +4,7 @@ from pi_enviro import PiEnviro
 
 
 # Initialize PiEnviro and API
-pi_enviro = PiEnviro()
+pi_enviro = PiEnviro(influxdb_config='aws_influxdb.yml') # initialize PiEnviro (using personal database)
 pi_enviro_api = Flask(__name__)
 
 
