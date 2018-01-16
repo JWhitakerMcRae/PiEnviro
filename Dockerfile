@@ -29,6 +29,7 @@ RUN pip install -U \
 RUN useradd -m "pienviro" && \
     echo "root:pienviro1!" | chpasswd && \
     echo "pienviro:pienviro1!" | chpasswd
+RUN echo "pienviro ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 # Setup app environment
 COPY start.sh config/* scripts/* /app/
