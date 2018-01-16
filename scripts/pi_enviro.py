@@ -305,7 +305,18 @@ class PiEnviro(object):
         Query and return current IP address.
         TODO: Allow dynamic determination of hardcoded "eth0" internet interface
         """
-        return ifaddresses('eth0')[AF_INET][0]['addr'] # physical ethernet cable
+        # first try to get wifi ip_addr
+        try:
+            return ifaddresses('wlan0')[AF_INET][0]['addr'] # wifi connection
+        except KeyError:
+            print('Unable to determine ip_addr from WiFi connection')
+        # fallback to ethernet ip_addr
+        try:
+            return ifaddresses('eth0')[AF_INET][0]['addr'] # physical ethernet cable
+        except KeyError:
+            print('Unable to determine ip_addr from ethernet connection')
+        # no connection
+        return ''
 
 
 if __name__ == '__main__':
