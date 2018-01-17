@@ -149,7 +149,7 @@ class PiEnviro(object):
             self._screen_text_color_index = 0
             self._screen_text_color = self.colors[self._screen_text_color_index]
         print('Screen color changed to {}'.format(self._screen_text_color))
-        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
+        self._sense_hat.clear(self._screen_text_color) # flash current color for feedback (scrolling text will overwrite it immediately)
 
     def dec_screen_color(self):
         """
@@ -163,7 +163,7 @@ class PiEnviro(object):
             self._screen_text_color_index = len(self.colors) - 1 # max
             self._screen_text_color = self.colors[self._screen_text_color_index]
         print('Screen color changed to {}'.format(self._screen_text_color))
-        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
+        self._sense_hat.clear(self._screen_text_color) # flash current color for feedback (scrolling text will overwrite it immediately)
 
     def inc_screen_speed(self):
         """
@@ -177,7 +177,7 @@ class PiEnviro(object):
             self._screen_speed_index = len(self.scroll_speeds) - 1 # max
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         print('Screen speed changed to {}'.format(self._screen_speed))
-        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
+        self._sense_hat.clear(self._screen_text_color) # flash current color for feedback (scrolling text will overwrite it immediately)
 
     def dec_screen_speed(self):
         """
@@ -191,7 +191,7 @@ class PiEnviro(object):
             self._screen_speed_index = 0
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         print('Screen speed changed to {}'.format(self._screen_speed))
-        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
+        self._sense_hat.clear(self._screen_text_color) # flash current color for feedback (scrolling text will overwrite it immediately)
 
     def _init_joystick_thread(self, start_thread=False):
         """
