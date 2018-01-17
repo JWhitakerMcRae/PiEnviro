@@ -158,33 +158,33 @@ class PiEnviro(object):
         try:
             self._screen_text_color = self.colors[self._screen_text_color_index]
         except IndexError: # loop
-            self._screen_text_color_index = len(self.colors) - 1
+            self._screen_text_color_index = len(self.colors) - 1 # max
             self._screen_text_color = self.colors[self._screen_text_color_index]
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     def inc_screen_speed(self):
         """
         Increment screen text scroll speed to next highest value in
-        self.scroll_speeds list. Loop when necessary.
+        self.scroll_speeds list. Don't loop.
         """
         self._screen_speed_index += 1
         try:
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         except IndexError: # loop
-            self._screen_speed_index = 0
+            self._screen_speed_index = len(self.scroll_speeds) - 1 # max
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     def dec_screen_speed(self):
         """
         Decrement screen text scroll speed to next highest value in
-        self.scroll_speeds list. Loop when necessary.
+        self.scroll_speeds list. Don't loop.
         """
         self._screen_speed_index -= 1
         try:
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         except IndexError: # loop
-            self._screen_speed_index = len(self.scroll_speeds) - 1
+            self._screen_speed_index = 0
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
