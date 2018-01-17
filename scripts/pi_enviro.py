@@ -147,6 +147,7 @@ class PiEnviro(object):
         except IndexError: # loop
             self._screen_text_color_index = 0
             self._screen_text_color = self.colors[self._screen_text_color_index]
+        print('Screen color changed to {}'.format(self._screen_text_color))
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     def dec_screen_color(self):
@@ -160,6 +161,7 @@ class PiEnviro(object):
         except IndexError: # loop
             self._screen_text_color_index = len(self.colors) - 1 # max
             self._screen_text_color = self.colors[self._screen_text_color_index]
+        print('Screen color changed to {}'.format(self._screen_text_color))
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     def inc_screen_speed(self):
@@ -173,6 +175,7 @@ class PiEnviro(object):
         except IndexError: # loop
             self._screen_speed_index = len(self.scroll_speeds) - 1 # max
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        print('Screen speed changed to {}'.format(self._screen_speed))
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     def dec_screen_speed(self):
@@ -186,6 +189,7 @@ class PiEnviro(object):
         except IndexError: # loop
             self._screen_speed_index = 0
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        print('Screen speed changed to {}'.format(self._screen_speed))
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     def _init_joystick_thread(self, start_thread=False):
@@ -218,6 +222,10 @@ class PiEnviro(object):
                     self.dec_screen_speed()
                 elif event.direction == "right":
                     self.inc_screen_speed()
+                else:
+                    print('Unrecognized direction!')
+            else:
+                print('Ignoring event ...')
 
     ####################################################################
 
