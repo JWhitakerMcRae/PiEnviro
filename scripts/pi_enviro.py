@@ -149,7 +149,7 @@ class PiEnviro(object):
             self._screen_text_color_index = 0
             self._screen_text_color = self.colors[self._screen_text_color_index]
         print('Screen color changed to {}'.format(self._screen_text_color))
-        self._sense_hat.clear() # clear for redraw
+        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
 
     def dec_screen_color(self):
         """
@@ -163,7 +163,7 @@ class PiEnviro(object):
             self._screen_text_color_index = len(self.colors) - 1 # max
             self._screen_text_color = self.colors[self._screen_text_color_index]
         print('Screen color changed to {}'.format(self._screen_text_color))
-        self._sense_hat.clear() # clear for redraw
+        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
 
     def inc_screen_speed(self):
         """
@@ -177,7 +177,7 @@ class PiEnviro(object):
             self._screen_speed_index = len(self.scroll_speeds) - 1 # max
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         print('Screen speed changed to {}'.format(self._screen_speed))
-        self._sense_hat.clear() # clear for redraw
+        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
 
     def dec_screen_speed(self):
         """
@@ -191,7 +191,7 @@ class PiEnviro(object):
             self._screen_speed_index = 0
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         print('Screen speed changed to {}'.format(self._screen_speed))
-        self._sense_hat.clear() # clear for redraw
+        self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
 
     def _init_joystick_thread(self, start_thread=False):
         """
@@ -260,6 +260,7 @@ class PiEnviro(object):
         Query and save current temperature.
         """
         self.curr_temp = self._read_temp()
+        print('Updated current temperature to {:.1f}'.format(self.curr_temp.to('degF')))
 
     def _read_temp(self, calibrate_temp=True):
         """
@@ -314,6 +315,7 @@ class PiEnviro(object):
         Query and save current humidity.
         """
         self.curr_humidity = self._read_humidity()
+        print('Updated current humidity to {:.1f}'.format(self.curr_humidity))
 
     def _read_humidity(self):
         """
@@ -353,6 +355,7 @@ class PiEnviro(object):
         Query and save current pressure.
         """
         self.curr_press = self._read_press()
+        print('Updated current pressure to {:.2f}'.format(self.curr_press.to('inHg')))
 
     def _read_press(self):
         """
