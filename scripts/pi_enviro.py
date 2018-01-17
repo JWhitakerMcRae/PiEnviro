@@ -149,7 +149,7 @@ class PiEnviro(object):
             self._screen_text_color_index = 0
             self._screen_text_color = self.colors[self._screen_text_color_index]
         print('Screen color changed to {}'.format(self._screen_text_color))
-        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+        self._sense_hat.clear() # clear for redraw
 
     def dec_screen_color(self):
         """
@@ -163,7 +163,7 @@ class PiEnviro(object):
             self._screen_text_color_index = len(self.colors) - 1 # max
             self._screen_text_color = self.colors[self._screen_text_color_index]
         print('Screen color changed to {}'.format(self._screen_text_color))
-        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+        self._sense_hat.clear() # clear for redraw
 
     def inc_screen_speed(self):
         """
@@ -177,7 +177,7 @@ class PiEnviro(object):
             self._screen_speed_index = len(self.scroll_speeds) - 1 # max
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         print('Screen speed changed to {}'.format(self._screen_speed))
-        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+        self._sense_hat.clear() # clear for redraw
 
     def dec_screen_speed(self):
         """
@@ -191,7 +191,7 @@ class PiEnviro(object):
             self._screen_speed_index = 0
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         print('Screen speed changed to {}'.format(self._screen_speed))
-        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+        self._sense_hat.clear() # clear for redraw
 
     def _init_joystick_thread(self, start_thread=False):
         """
@@ -410,7 +410,6 @@ class PiEnviro(object):
     def _get_ipaddr(self):
         """
         Query and return current IP address.
-        TODO: Allow dynamic determination of hardcoded "eth0" internet interface
         """
         # first try to get wifi ip_addr
         try:
