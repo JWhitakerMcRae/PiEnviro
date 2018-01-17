@@ -31,7 +31,7 @@ class PiEnviro(object):
               (0,255,255),    # cyan / aqua
               (255,0,255)]    # magenta / fuchsia
 
-    scroll_speeds = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
+    scroll_speeds = [0.15, 0.125, 0.1, 0.075, 0.05] # slow to fast
 
     # Environment data
     curr_temp = None
@@ -132,7 +132,7 @@ class PiEnviro(object):
         """
         Generate and return screen message.
         """
-        return 'Temp: {:.2f}, Humidity: {:.2f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
+        return 'Temp: {:.1f}, Humidity: {:.1f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
 
     ####################################################################
 
@@ -214,14 +214,14 @@ class PiEnviro(object):
             event = self._sense_hat.stick.wait_for_event()
             print('Detected joystick event: {} was {} at {}'.format(event.action, event.direction, event.timestamp))
             if event.action == "pressed":
-                if event.direction == "up":
+                if event.direction == "up": # TODO: handle correct joystick orientation per self._screen_rotation
                     self.inc_screen_color()
                 elif event.direction == "down":
                     self.dec_screen_color()
                 elif event.direction == "left":
-                    self.dec_screen_speed()
-                elif event.direction == "right":
                     self.inc_screen_speed()
+                elif event.direction == "right":
+                    self.dec_screen_speed()
                 else:
                     print('Unrecognized direction!')
             else:
