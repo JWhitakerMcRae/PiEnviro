@@ -72,7 +72,7 @@ class PiEnviro(object):
         # Initialize screen defaults
         self._screen_rotation = 180 # horizontal when power supply is in back
         self._screen_message = '' # This is set by _update_screen_message
-        self._screen_speed_index = 1 # fast-ish
+        self._screen_speed_index = 2 # middle
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         self._screen_text_color_index = 4 # blue
         self._screen_text_color = self.colors[self._screen_text_color_index]
