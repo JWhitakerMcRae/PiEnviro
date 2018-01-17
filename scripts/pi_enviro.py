@@ -31,7 +31,8 @@ class PiEnviro(object):
               (0,255,255),    # cyan / aqua
               (255,0,255)]    # magenta / fuchsia
 
-    scroll_speeds = [0.15, 0.125, 0.1, 0.075, 0.05] # slow to fast
+    # Scroll speeds (lower is faster)
+    scroll_speeds = [0.15, 0.125, 0.1, 0.075, 0.05]
 
     # Environment data
     curr_temp = None
