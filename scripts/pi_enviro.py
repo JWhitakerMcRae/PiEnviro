@@ -71,7 +71,7 @@ class PiEnviro(object):
         # Initialize screen defaults
         self._screen_rotation = 180 # horizontal when power supply is in back
         self._screen_message = '' # This is set by _update_screen_message
-        self._screen_speed_index = 1 # slow-ish
+        self._screen_speed_index = 1 # fast-ish
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         self._screen_text_color_index = 4 # blue
         self._screen_text_color = self.colors[self._screen_text_color_index]
@@ -210,7 +210,7 @@ class PiEnviro(object):
             event = self._sense_hat.stick.wait_for_event()
             print('Detected joystick event: {} was {} at {}'.format(event.action, event.direction, event.timestamp))
             if event.action == "pressed":
-                if event.direction == "up": # TODO: adjust directions for changes in self._screen_rotation
+                if event.direction == "up":
                     self.inc_screen_color()
                 elif event.direction == "down":
                     self.dec_screen_color()
