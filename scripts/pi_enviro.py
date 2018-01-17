@@ -22,8 +22,16 @@ class PiEnviro(object):
     """
 
     # Colors (R,G,B)
-    pink = (215, 25, 139)
-    black = (0, 0, 0)
+    colors = [(0,0,0),        # black
+              (255,255,255),  # white
+              (255,0,0),      # red
+              (0,255,0),      # lime
+              (0,0,255),      # blue
+              (255,255,0),    # yellow
+              (0,255,255),    # cyan / aqua
+              (255,0,255)]    # magenta / fuchsia
+
+    scroll_speeds = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
 
     # Environment data
     curr_temp = None
@@ -61,9 +69,11 @@ class PiEnviro(object):
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
         self._screen_message = '' # This is set by _update_screen_message
-        self._screen_speed = 0.1
-        self._screen_text_color = self.pink
-        self._screen_background_color = self.black
+        self._screen_speed_index = 1 # slow-ish
+        self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        self._screen_text_color_index = 4 # blue
+        self._screen_text_color = self.colors[self._screen_text_color_index]
+        self._screen_background_color = self.colors[0] # black
 
     def _init_sense_hat(self):
         """
@@ -77,6 +87,60 @@ class PiEnviro(object):
         self.curr_temp = self._read_temp()
         self.curr_humidity = self._read_humidity()
         self.curr_press = self._read_press()
+
+    ####################################################################
+
+    def inc_screen_color(self):
+        """
+        Increment screen color to next highest value in self.colors
+        list. Loop when necessary.
+        """
+        self._screen_text_color_index += 1
+        try:
+            self._screen_text_color = self.colors[self._screen_text_color_index]
+        except IndexError: # loop
+            self._screen_text_color_index = 0
+            self._screen_text_color = self.colors[self._screen_text_color_index]
+        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+
+    def dec_screen_color(self):
+        """
+        Decrement screen color to next highest value in self.colors
+        list. Loop when necessary.
+        """
+        self._screen_text_color_index -= 1
+        try:
+            self._screen_text_color = self.colors[self._screen_text_color_index]
+        except IndexError: # loop
+            self._screen_text_color_index = len(self.colors) - 1
+            self._screen_text_color = self.colors[self._screen_text_color_index]
+        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+
+    def inc_screen_speed(self):
+        """
+        Increment screen text scroll speed to next highest value in
+        self.scroll_speeds list. Loop when necessary.
+        """
+        self._screen_speed_index += 1
+        try:
+            self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        except IndexError: # loop
+            self._screen_speed_index = 0
+            self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
+
+    def dec_screen_speed(self):
+        """
+        Decrement screen text scroll speed to next highest value in
+        self.scroll_speeds list. Loop when necessary.
+        """
+        self._screen_speed_index -= 1
+        try:
+            self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        except IndexError: # loop
+            self._screen_speed_index = len(self.scroll_speeds) - 1
+            self._screen_speed = self.scroll_speeds[self._screen_speed_index]
+        # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
     ####################################################################
 
