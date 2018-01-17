@@ -50,6 +50,7 @@ class PiEnviro(object):
         self._init_sense_hat()
         # Initialize control threads
         self._screen_thread_obj = self._init_screen_thread()
+        self._joystick_thread_obj = self._init_joystick_thread()
         self._temp_thread_obj = self._init_temp_thread()
         self._humidity_thread_obj = self._init_humidity_thread()
         self._press_thread_obj = self._init_press_thread()
@@ -68,6 +69,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
+        self._screen_rotation = 180 # horizontal when power supply is in back
         self._screen_message = '' # This is set by _update_screen_message
         self._screen_speed_index = 1 # slow-ish
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
@@ -82,11 +84,55 @@ class PiEnviro(object):
         # Initialize SenseHat object
         self._sense_hat = SenseHat()
         self._sense_hat.low_light = True # make screen a little dimmer
-        self._sense_hat.set_rotation(180) # set rotation for horizontal, with power supple in the back
+        self._sense_hat.set_rotation(self._screen_rotation)
         # Initialize environment defaults
         self.curr_temp = self._read_temp()
         self.curr_humidity = self._read_humidity()
         self.curr_press = self._read_press()
+
+    ####################################################################
+
+    def run(self):
+        """
+        Run application, which starts all initialized threads.
+        """
+        self._screen_thread_obj.start()
+        self._joystick_thread_obj.start()
+        self._temp_thread_obj.start()
+        self._humidity_thread_obj.start()
+        self._press_thread_obj.start()
+        if hasattr(self, '_influxdb_thread_obj'): self._influxdb_thread_obj.start() # only start this thread if it was initialized
+
+    ####################################################################
+
+    def _init_screen_thread(self, start_thread=False):
+        """
+        Initialize screen update thread and return it.
+        :param start_thread: If True will also start thread.
+        """
+        screen_thread = Thread(target=self._screen_thread)
+        if start_thread: screen_thread.start()
+        return screen_thread
+
+    def _screen_thread(self):
+        """
+        Screen update thread loop.
+        """
+        while True:
+            self._update_screen_message()
+            self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
+
+    def _update_screen_message(self):
+        """
+        Generate and save screen message.
+        """
+        self._screen_message = self._generate_screen_message()
+
+    def _generate_screen_message(self):
+        """
+        Generate and return screen message.
+        """
+        return 'Temp: {:.2f}, Humidity: {:.2f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
 
     ####################################################################
 
@@ -142,48 +188,36 @@ class PiEnviro(object):
             self._screen_speed = self.scroll_speeds[self._screen_speed_index]
         # TODO: set in SenseHAT immediately (currently will set on next screen thread update)
 
-    ####################################################################
-
-    def run(self):
+    def _init_joystick_thread(self, start_thread=False):
         """
-        Run application, which starts all initialized threads.
-        """
-        self._screen_thread_obj.start()
-        self._temp_thread_obj.start()
-        self._humidity_thread_obj.start()
-        self._press_thread_obj.start()
-        if hasattr(self, '_influxdb_thread_obj'): self._influxdb_thread_obj.start() # only start this thread if it was initialized
-
-    ####################################################################
-
-    def _init_screen_thread(self, start_thread=False):
-        """
-        Initialize screen update thread and return it.
+        Initialize joystick input thread and return it.
         :param start_thread: If True will also start thread.
         """
-        screen_thread = Thread(target=self._screen_thread)
-        if start_thread: screen_thread.start()
-        return screen_thread
+        joystick_thread = Thread(target=self._joystick_thread)
+        if start_thread: joystick_thread.start()
+        return joystick_thread
 
-    def _screen_thread(self):
+    def _joystick_thread(self):
         """
-        Screen update thread loop.
+        Joystick input thread loop.
+        NOTES ON API:
+        A tuple describing a joystick event. Contains three named parameters:
+        timestamp - The time at which the event occurred, as a fractional number of seconds (the same format as the built-in time function)
+        direction - The direction the joystick was moved, as a string ("up", "down", "left", "right", "middle")
+        action - The action that occurred, as a string ("pressed", "released", "held")
         """
         while True:
-            self._update_screen_message()
-            self._sense_hat.show_message(self._screen_message, self._screen_speed, self._screen_text_color, self._screen_background_color)
-
-    def _update_screen_message(self):
-        """
-        Generate and save screen message.
-        """
-        self._screen_message = self._generate_screen_message()
-
-    def _generate_screen_message(self):
-        """
-        Generate and return screen message.
-        """
-        return 'Temperature: {:.2f}, Humidity: {:.2f}, Pressure: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
+            event = self._sense_hat.stick.wait_for_event()
+            print('Detected joystick event: {} was {} at {}'.format(event.action, event.direction, event.timestamp))
+            if event.action == "pressed":
+                if event.direction == "up": # TODO: adjust directions for changes in self._screen_rotation
+                    self.inc_screen_color()
+                elif event.direction == "down":
+                    self.dec_screen_color()
+                elif event.direction == "left":
+                    self.dec_screen_speed()
+                elif event.direction == "right":
+                    self.inc_screen_speed()
 
     ####################################################################
 
