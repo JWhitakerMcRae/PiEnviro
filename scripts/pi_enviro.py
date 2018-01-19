@@ -128,12 +128,15 @@ class PiEnviro(object):
         Generate and save screen message.
         """
         self._screen_message = self._generate_screen_message()
+        print('Screen message updated to "{}"'.format(self._screen_message))
 
     def _generate_screen_message(self):
         """
         Generate and return screen message.
         """
-        return 'Temp: {:.1f}, Humidity: {:.1f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
+        screen_message = 'Temp: {:.1f}, Humidity: {:.1f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
+        screen_message = screen_message.replace('_', '') # strip '_' from 'in_Hg' -- this can be removed if pint updates to output string as 'inHg' instead of inserting the extra '_'
+        return screen_message
 
     ####################################################################
 
