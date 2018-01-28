@@ -19,6 +19,7 @@ RUN apt-get update && apt-get -y install \
     bluetooth \
     bluez \
     libbluetooth-dev \
+    libboost-python-dev \
     libglib2.0-dev \
     python-dev \
     python-pip \
