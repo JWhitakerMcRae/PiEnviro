@@ -16,6 +16,7 @@ RUN apt-get update && apt-get -y install \
 
 # Install en_US.UTF-8
 RUN apt-get update && apt-get -y install \
+    apt-utils \
     debconf \
     locales
 RUN dpkg-reconfigure locales && \
