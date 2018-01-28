@@ -18,8 +18,8 @@ RUN apt-get update && apt-get -y install \
 RUN apt-get update && apt-get -y install \
     bluetooth \
     bluez \
-    glib-2.0 \
     libbluetooth-dev \
+    libglib2.0-dev \
     python-dev \
     python-pip \
     sense-hat
