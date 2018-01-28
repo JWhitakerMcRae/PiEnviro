@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 from flask import Flask
 from pi_enviro import PiEnviro
 

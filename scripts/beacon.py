@@ -1,8 +1,12 @@
+#!/usr/bin/python
 from bluetooth.ble import BeaconService
 
 
 class Beacon(object):
-    
+    """
+    TODO
+    """
+
     def __init__(self, address, data):
         """
         TODO
@@ -24,9 +28,8 @@ class Beacon(object):
 
 if __name__ == '__main__':
     # Create beacon service and scan for devices (2 seconds)
-    service = BeaconService()
+    service = BeaconService('hci0')
     devices = service.scan(2)
-    print('Found {} beacons!'.format(len(devices)))
     # Connect to each beacon, print results of device scan
     for address, data in list(devices.items()):
         beacon = Beacon(address, data)

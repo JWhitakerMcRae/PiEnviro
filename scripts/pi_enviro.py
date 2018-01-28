@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 from datetime import datetime
 from netifaces import ifaddresses, AF_INET
 from os import popen
