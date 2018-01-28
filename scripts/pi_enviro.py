@@ -13,6 +13,8 @@ from threading import Thread
 from time import sleep
 from yaml import load, YAMLError
 
+# TODO: Remove InfluxDB stuff and put in separate class, which can call PiEnviro getters to post to database
+
 
 class PiEnviro(object):
     """
