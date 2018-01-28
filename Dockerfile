@@ -16,7 +16,8 @@ RUN apt-get update && apt-get -y install \
 
 # Install en_US.UTF-8
 RUN apt-get update && apt-get -y install \
-    apt-utils \
+    apt-utils
+RUN apt-get update && apt-get -y install \
     debconf \
     locales
 RUN dpkg-reconfigure locales && \
@@ -29,6 +30,7 @@ RUN apt-get update && apt-get -y install \
     bluetooth \
     bluez \
     libbluetooth-dev \
+    libboost-all-dev \
     libboost-python-dev \
     libglib2.0-dev \
     python-dev \
