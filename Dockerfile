@@ -6,8 +6,6 @@ ENV INITSYSTEM on
 
 # Install base OS tools and dependencies
 RUN apt-get update && apt-get -y install \
-    bluetooth \
-    bluez \
     build-essential \
     net-tools \
     openssh-server \
@@ -18,6 +16,9 @@ RUN apt-get update && apt-get -y install \
 
 # Install pip and other script requirements
 RUN apt-get update && apt-get -y install \
+    bluetooth \
+    bluez \
+    libbluetooth-dev \
     python-dev \
     python-pip \
     sense-hat
@@ -31,8 +32,8 @@ RUN pip install -U \
 # Add user credentials
 RUN useradd -m "pienviro" && \
     echo "root:pienviro1!" | chpasswd && \
-    echo "pienviro:pienviro1!" | chpasswd
-RUN echo "pienviro ALL=(ALL:ALL) ALL" >> /etc/sudoers
+    echo "pienviro:pienviro1!" | chpasswd && \
+    echo "pienviro ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 # Setup app environment
 COPY start.sh config/* scripts/* /app/
