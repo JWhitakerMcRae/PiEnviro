@@ -1,2 +1,2 @@
 #!/bin/sh
-python /app/pi_enviro_api.py
+python /app/rest_api.py

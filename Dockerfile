@@ -23,6 +23,7 @@ RUN pip install -U \
     flask \
     netifaces \
     pint \
+    pybluez \
     PyYAML
 
 # Add user credentials
