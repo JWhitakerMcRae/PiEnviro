@@ -24,6 +24,7 @@ RUN apt-get update && apt-get -y install \
     sense-hat
 RUN pip install -U \
     flask \
+    gattlib \
     netifaces \
     pint \
     pybluez \
