@@ -14,17 +14,6 @@ RUN apt-get update && apt-get -y install \
     vim \
     wget
 
-# Install en_US.UTF-8
-RUN apt-get update && apt-get -y install \
-    apt-utils
-RUN apt-get update && apt-get -y install \
-    debconf \
-    locales
-RUN dpkg-reconfigure locales && \
-    locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
-
 # Install pip and other script requirements
 RUN apt-get update && apt-get -y install \
     bluetooth \
