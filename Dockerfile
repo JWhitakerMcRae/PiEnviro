@@ -6,6 +6,8 @@ ENV INITSYSTEM on
 
 # Install base OS tools and dependencies
 RUN apt-get update && apt-get -y install \
+    bluetooth \
+    bluez \
     build-essential \
     net-tools \
     openssh-server \
