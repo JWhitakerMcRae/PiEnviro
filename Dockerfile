@@ -7,7 +7,6 @@ ENV INITSYSTEM on
 # Install base OS tools and dependencies
 RUN apt-get update && apt-get -y install \
     build-essential \
-    debconf \
     net-tools \
     openssh-server \
     pkgconf \
@@ -16,6 +15,9 @@ RUN apt-get update && apt-get -y install \
     wget
 
 # Install en_US.UTF-8
+RUN apt-get update && apt-get -y install \
+    debconf \
+    locales
 RUN dpkg-reconfigure locales && \
     locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
