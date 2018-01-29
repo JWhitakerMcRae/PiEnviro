@@ -419,16 +419,16 @@ class PiEnviro(object):
         """
         Query and return current IP address.
         """
-        # first try to get wifi ip_addr
-        try:
-            return ifaddresses('wlan0')[AF_INET][0]['addr'] # wifi connection
-        except KeyError:
-            print('Unable to determine ip_addr from WiFi connection')
-        # fallback to ethernet ip_addr
+        # prefer ethernet ip_addr (if available)
         try:
             return ifaddresses('eth0')[AF_INET][0]['addr'] # physical ethernet cable
         except KeyError:
             print('Unable to determine ip_addr from ethernet connection')
+        # use wifi ip_addr if no ethernet
+        try:
+            return ifaddresses('wlan0')[AF_INET][0]['addr'] # wifi connection
+        except KeyError:
+            print('Unable to determine ip_addr from WiFi connection')
         # no connection
         return ''
 
