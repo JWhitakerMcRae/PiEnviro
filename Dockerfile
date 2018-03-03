@@ -40,7 +40,7 @@ RUN useradd -m "pienviro" && \
     echo "pienviro ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 # Setup app environment
-COPY start.sh config/* scripts/* /app/
+COPY start.sh config/* src/* /app/
 RUN chmod 744 /app/start.sh
 
 # Start app
