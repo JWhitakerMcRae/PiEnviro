@@ -72,7 +72,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
-        self._screen_rotation = 180 # horizontal when power supply is in back
+        self._screen_rotation = 90 # horizontal when USB ports down
         self._screen_message = '' # This is set by _update_screen_message
         self._screen_speed_index = 2 # middle
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
