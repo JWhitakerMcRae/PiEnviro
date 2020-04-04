@@ -40,7 +40,7 @@ RUN wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz && \
 # Install SenseHat utilities
 RUN apt-get install --reinstall \
     raspberrypi-bootloader
-RUN apt-get update && apt-get -y install \
+CMD modprobe i2c-dev && apt-get update && apt-get -y install \
     sense-hat
 
 # Install Bluetooth utilities
