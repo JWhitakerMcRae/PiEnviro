@@ -34,9 +34,9 @@ class PiEnviro(object):
               (255,0,255)]    # magenta / fuchsia
 
     screen_rotations = [0,    # power forward
-                        90,   # power right
+                        90,   # power left
                         180,  # power back
-                        270]  # power left
+                        270]  # power right
 
     # Scroll speeds (lower is faster)
     scroll_speeds = [0.15, 0.125, 0.1, 0.075, 0.05]
@@ -77,7 +77,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
-        self._screen_rotation = screen_rotations[3]
+        self._screen_rotation = screen_rotations[1]
         self._screen_message = '' # This is set by _update_screen_message
         self._screen_speed_index = 2 # middle
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
@@ -389,7 +389,7 @@ class PiEnviro(object):
                     post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
                 else: # no credentials needed
                     post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
-        except IOError, YAMLError:
+        except IOError, YAMLError:  # TODO: IOError is OSError in Python 3.3+
             print('Could not create InfluxDB post url path, invalid config file ({})!'.format(influxdb_config))
         print('Generated InfluxDB post url: {}'.format(post_url))
         return post_url
