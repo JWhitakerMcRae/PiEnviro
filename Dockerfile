@@ -34,7 +34,8 @@ RUN wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz && \
     cd Python-3.6.4 && \
     ./configure --with-ensurepip=install --enable-optimizations && \
     make -j8 && \
-    sudo make altinstall
+    sudo make altinstall && \
+    python3.6 -m ensurepip --upgrade
 
 # Install SenseHat utilities
 RUN apt-get install --reinstall \
