@@ -11,8 +11,7 @@ RUN apt-get update && apt-get -y install \
     openssh-server \
     pkgconf \
     rpi-update \
-    vim \
-    wget
+    vim
 
 # Install Python 3.6.4
 RUN apt-get update && apt-get install -y \
@@ -33,10 +32,9 @@ RUN apt-get update && apt-get install -y \
 RUN wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz && \
     tar xvf Python-3.6.4.tgz && \
     cd Python-3.6.4 && \
-    ./configure --enable-optimizations && \
+    ./configure --with-ensurepip=install --enable-optimizations && \
     make -j8 && \
     sudo make altinstall
-RUN python3.6 get-pip.py
 
 # Install SenseHat utilities
 RUN apt-get install --reinstall \
