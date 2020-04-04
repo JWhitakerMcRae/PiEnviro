@@ -53,12 +53,12 @@ CMD modprobe i2c-dev && apt-get update && apt-get -y install \
 #    libglib2.0-dev \
 #    python3-dev \
 #    python3-pip
-#RUN pip3 install -U \
+#RUN pip3.6 install -U \
 #    gattlib \
 #    pybluez
 
 # Install remaining PiEnviro requirements
-RUN pip3 install -U \
+RUN pip3.6 install -U \
     flask \
     netifaces \
     Pint \
