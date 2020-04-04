@@ -10,7 +10,7 @@ RUN apt-get update && apt-get -y install \
     net-tools \
     openssh-server \
     pkgconf \
-    rpi-update \
+#    rpi-update \
     vim \
     wget
 RUN apt-get install --reinstall \
