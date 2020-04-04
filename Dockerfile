@@ -18,15 +18,16 @@ RUN apt-get install --reinstall \
 
 # Install pip and other script requirements
 RUN apt-get update && apt-get -y install \
+    python3-dev \
+    python3-pip \
+    sense-hat
+RUN apt-get update && apt-get -y install \
     bluetooth \
     bluez \
     libbluetooth-dev \
     libboost-all-dev \
     libboost-python-dev \
     libglib2.0-dev \
-    python3-dev \
-    python3-pip \
-    sense-hat
 RUN pip3 install -U \
     flask \
     gattlib \
