@@ -389,7 +389,7 @@ class PiEnviro(object):
                     post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
                 else: # no credentials needed
                     post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
-        except IOError, YAMLError:  # TODO: IOError is OSError in Python 3.3+
+        except (IOError, YAMLError) as err:
             print('Could not create InfluxDB post url path, invalid config file ({})!'.format(influxdb_config))
         print('Generated InfluxDB post url: {}'.format(post_url))
         return post_url
