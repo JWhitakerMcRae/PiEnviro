@@ -1,5 +1,5 @@
 # Install base image
-FROM resin/raspberrypi3-ubuntu:latest
+FROM resin/raspberrypi3-debian-python:latest
 
 # Enable systemd
 ENV INITSYSTEM on
@@ -10,11 +10,11 @@ RUN apt-get update && apt-get -y install \
     net-tools \
     openssh-server \
     pkgconf \
-#    rpi-update \
+    rpi-update \
     vim \
     wget
-#RUN apt-get install --reinstall \
-#    raspberrypi-bootloader
+RUN apt-get install --reinstall \
+    raspberrypi-bootloader
 
 # Install pip and other script requirements
 RUN apt-get update && apt-get -y install \
