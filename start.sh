@@ -1,3 +1,3 @@
 #!/bin/sh
-python /app/beacon.py &
-python /app/rest_api.py
+python3 /app/beacon.py &
+python3 /app/rest_api.py

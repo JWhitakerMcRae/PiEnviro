@@ -24,14 +24,14 @@ RUN apt-get update && apt-get -y install \
     libboost-all-dev \
     libboost-python-dev \
     libglib2.0-dev \
-    python-dev \
-    python-pip \
+    python3-dev \
+    python3-pip \
     sense-hat
-RUN pip install -U \
+RUN pip3 install -U \
     flask \
     gattlib \
     netifaces \
-    pint \
+    Pint \
     pybluez \
     PyYAML
 
