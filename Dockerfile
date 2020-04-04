@@ -13,8 +13,8 @@ RUN apt-get update && apt-get -y install \
 #    rpi-update \
     vim \
     wget
-RUN apt-get install --reinstall \
-    raspberrypi-bootloader
+#RUN apt-get install --reinstall \
+#    raspberrypi-bootloader
 
 # Install pip and other script requirements
 RUN apt-get update && apt-get -y install \
