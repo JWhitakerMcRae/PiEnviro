@@ -62,7 +62,8 @@ RUN pip3.6 install -U \
     flask \
     netifaces \
     Pint \
-    PyYAML
+    PyYAML \
+    requests
 
 # Add user credentials
 RUN useradd -m "pienviro" && \
