@@ -25,6 +25,8 @@ RUN apt-get update && apt-get -y install \
     python-dev \
     python-pip \
     sense-hat
+RUN apt-get install --reinstall \
+    raspberrypi-bootloader
 RUN pip install -U \
     flask \
     gattlib \
