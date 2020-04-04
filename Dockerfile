@@ -13,6 +13,8 @@ RUN apt-get update && apt-get -y install \
     rpi-update \
     vim \
     wget
+RUN apt-get install --reinstall \
+    raspberrypi-bootloader
 
 # Install pip and other script requirements
 RUN apt-get update && apt-get -y install \
@@ -25,8 +27,6 @@ RUN apt-get update && apt-get -y install \
     python-dev \
     python-pip \
     sense-hat
-RUN apt-get install --reinstall \
-    raspberrypi-bootloader
 RUN pip install -U \
     flask \
     gattlib \
