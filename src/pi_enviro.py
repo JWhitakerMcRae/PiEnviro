@@ -33,6 +33,11 @@ class PiEnviro(object):
               (0,255,255),    # cyan / aqua
               (255,0,255)]    # magenta / fuchsia
 
+    screen_rotations = [0,    # power forward
+                        90,   # power right
+                        180,  # power back
+                        270]  # power left
+
     # Scroll speeds (lower is faster)
     scroll_speeds = [0.15, 0.125, 0.1, 0.075, 0.05]
 
@@ -72,7 +77,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
-        self._screen_rotation = 180 # horizontal when power supply is in back
+        self._screen_rotation = screen_rotations[3]
         self._screen_message = '' # This is set by _update_screen_message
         self._screen_speed_index = 2 # middle
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
