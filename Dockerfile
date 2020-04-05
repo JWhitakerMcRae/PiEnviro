@@ -68,7 +68,8 @@ CMD modprobe i2c-dev && apt-get update && apt-get -y install \
 RUN pip3 install -U \
     flask \
     netifaces \
-    Pint \
+    Pint
+RUN pip3 install -U \
     requests
 
 # Add user credentials
