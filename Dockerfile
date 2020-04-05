@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y install \
     vim
 RUN apt-get update && apt-get -y install \
     python-dev \
-    python-pip
+    python-pip \
     python3-dev \
     python3-pip
 
