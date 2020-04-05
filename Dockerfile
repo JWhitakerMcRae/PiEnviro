@@ -13,6 +13,8 @@ RUN apt-get update && apt-get -y install \
     rpi-update \
     vim
 RUN apt-get update && apt-get -y install \
+    python-dev \
+    python-pip
     python3-dev \
     python3-pip
 
@@ -65,6 +67,9 @@ CMD modprobe i2c-dev && apt-get update && apt-get -y install \
 #    pybluez
 
 # Install remaining PiEnviro requirements
+RUN pip install -U \
+    flask \
+    netifaces
 RUN pip3 install -U \
     flask \
     netifaces

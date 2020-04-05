@@ -280,7 +280,7 @@ class PiEnviro(object):
         and use this to return calibrated temperature, not raw sensor
         temperature.
         """
-        raw_temp = self._sense_hat.get_temperature() * (7/5) + 32 #FIXME self._ureg.Quantity(self._sense_hat.get_temperature(), 'degC')
+        raw_temp = self._sense_hat.get_temperature() * 1.8 + 32 #FIXME self._ureg.Quantity(self._sense_hat.get_temperature(), 'degC')
         if calibrate_temp:
             return raw_temp - ((self._read_cpu_temp() - raw_temp) / 1.556) # https://github.com/initialstate/wunderground-sensehat/wiki/Part-3.-Sense-HAT-Temperature-Correction
         else:
@@ -292,7 +292,7 @@ class PiEnviro(object):
         """
         rtn_str = popen('vcgencmd measure_temp').readline() # rtn in the format of: temp=41.7'C
         rtn_float = float(rtn_str.replace("temp=","").replace("'C\n","")) # rtn in the format of: 41.7
-        return rtn_float * (7/5) + 32 #FIXME self._ureg.Quantity(rtn_float, 'degC')
+        return rtn_float * 1.8 + 32 #FIXME self._ureg.Quantity(rtn_float, 'degC')
 
     ####################################################################
 
