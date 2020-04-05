@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y install \
     rpi-update \
     vim
 RUN apt-get update && apt-get -y install \
-    python3 \
+    python3-dev \
     python3-pip
 
 # Install Python 3.6.4
