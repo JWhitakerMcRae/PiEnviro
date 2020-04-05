@@ -12,32 +12,35 @@ RUN apt-get update && apt-get -y install \
     pkgconf \
     rpi-update \
     vim
+RUN apt-get update && apt-get -y install \
+    python3 \
+    python3-pip
 
 # Install Python 3.6.4
-RUN apt-get update && apt-get install -y \
-    make \
-    build-essential \
-    libssl-dev \
-    zlib1g-dev \
-    libbz2-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    wget \
-    curl \
-    llvm \
-    libncurses5-dev \
-    libncursesw5-dev \
-    xz-utils \
-    tk-dev
-RUN wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz && \
-    tar xvf Python-3.6.4.tgz && \
-    cd Python-3.6.4 && \
-    ./configure --with-ensurepip=install --enable-optimizations && \
-    make -j8 && \
-    sudo make install
+#RUN apt-get update && apt-get install -y \
+#    make \
+#    build-essential \
+#    libssl-dev \
+#    zlib1g-dev \
+#    libbz2-dev \
+#    libreadline-dev \
+#    libsqlite3-dev \
+#    wget \
+#    curl \
+#    llvm \
+#    libncurses5-dev \
+#    libncursesw5-dev \
+#    xz-utils \
+#    tk-dev
+#RUN wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz && \
+#    tar xvf Python-3.6.4.tgz && \
+#    cd Python-3.6.4 && \
+#    ./configure --with-ensurepip=install --enable-optimizations && \
+#    make -j8 && \
+#    sudo make install
 #    ln -s /usr/local/bin/python3.6 /usr/local/bin/python3 && \
 #    ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-RUN python3.6 -m ensurepip --upgrade
+#RUN python3.6 -m ensurepip --upgrade
 #    ln -s /usr/local/bin/pip3.6 /usr/local/bin/pip3 && \
 #    ln -s /usr/local/bin/pip3.6 /usr/local/bin/pip
 
