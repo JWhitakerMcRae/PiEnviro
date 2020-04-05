@@ -3,9 +3,9 @@ from datetime import datetime
 from netifaces import ifaddresses, AF_INET
 from os import popen
 from os.path import dirname, join
-from pint import UnitRegistry
-from pint.converters import ScaleConverter
-from pint.unit import UnitDefinition
+#FIXME from pint import UnitRegistry
+#FIXME from pint.converters import ScaleConverter
+#FIXME from pint.unit import UnitDefinition
 #FIXME from requests import post
 #FIXME from requests.exceptions import ConnectionError, MissingSchema
 from sense_hat import SenseHat
@@ -69,8 +69,8 @@ class PiEnviro(object):
         Initialize default values.
         """
         # Initialize unit registry, percent unit (for humidity)
-        self._ureg = UnitRegistry()
-        self._ureg.define(UnitDefinition('%', 'pct', (), ScaleConverter(1/100.0)))
+        #FIXME self._ureg = UnitRegistry()
+        #FIXME self._ureg.define(UnitDefinition('%', 'pct', (), ScaleConverter(1/100.0)))
         # Initialize timing defaults
         self._read_temp_wait_sec = 15.0
         self._read_humidity_wait_sec = 15.0
@@ -141,8 +141,9 @@ class PiEnviro(object):
         """
         Generate and return screen message.
         """
-        screen_message = 'Temp: {:.1f}, Humidity: {:.1f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
-        screen_message = screen_message.replace('_', '') # strip '_' from 'in_Hg' -- this can be removed if pint updates to output string as 'inHg' instead of inserting the extra '_'
+        #FIXME screen_message = 'Temp: {:.1f}, Humidity: {:.1f}, Press: {:.2f}'.format(self.curr_temp.to('degF'), self.curr_humidity, self.curr_press.to('inHg'))
+        #FIXME screen_message = screen_message.replace('_', '') # strip '_' from 'in_Hg' -- this can be removed if pint updates to output string as 'inHg' instead of inserting the extra '_'
+        screen_message = 'Temp: {:.1f} degF, Humidity: {:.1f} %, Press: {:.2f} inHg'.format(self.curr_temp, self.curr_humidity, self.curr_press)
         return screen_message
 
     ####################################################################
@@ -246,7 +247,7 @@ class PiEnviro(object):
         :param force_update: Force update before return.
         """
         if force_update: self._update_temp()
-        return self.curr_temp.to('degF').magnitude # return as float using units degF
+        return self.curr_temp #FIXME self.curr_temp.to('degF').magnitude # return as float using units degF
 
     def _init_temp_thread(self, start_thread=False):
         """
@@ -279,7 +280,7 @@ class PiEnviro(object):
         and use this to return calibrated temperature, not raw sensor
         temperature.
         """
-        raw_temp = self._ureg.Quantity(self._sense_hat.get_temperature(), 'degC')
+        raw_temp = self._sense_hat.get_temperature() * (7/5) + 32 #FIXME self._ureg.Quantity(self._sense_hat.get_temperature(), 'degC')
         if calibrate_temp:
             return raw_temp - ((self._read_cpu_temp() - raw_temp) / 1.556) # https://github.com/initialstate/wunderground-sensehat/wiki/Part-3.-Sense-HAT-Temperature-Correction
         else:
@@ -291,7 +292,7 @@ class PiEnviro(object):
         """
         rtn_str = popen('vcgencmd measure_temp').readline() # rtn in the format of: temp=41.7'C
         rtn_float = float(rtn_str.replace("temp=","").replace("'C\n","")) # rtn in the format of: 41.7
-        return self._ureg.Quantity(rtn_float, 'degC')
+        return rtn_float * (7/5) + 32 #FIXME self._ureg.Quantity(rtn_float, 'degC')
 
     ####################################################################
 
@@ -301,7 +302,7 @@ class PiEnviro(object):
         :param force_update: Force update before return.
         """
         if force_update: self._update_humidity()
-        return self.curr_humidity.magnitude # return as flaot
+        return self.curr_humidity #FIXME self.curr_humidity.magnitude # return as flaot
 
     def _init_humidity_thread(self, start_thread=False):
         """
@@ -331,7 +332,7 @@ class PiEnviro(object):
         """
         Query and return current humidity.
         """
-        return self._ureg.Quantity(self._sense_hat.get_humidity(), 'pct')
+        return self._sense_hat.get_humidity() # FIXME self._ureg.Quantity(self._sense_hat.get_humidity(), 'pct')
 
     ####################################################################
 
@@ -341,7 +342,7 @@ class PiEnviro(object):
         :param force_update: Force update before return.
         """
         if force_update: self._update_press()
-        return self.curr_press.to('inHg').magnitude # return as float using units inHg
+        return self.curr_press #FIXME self.curr_press.to('inHg').magnitude # return as float using units inHg
 
     def _init_press_thread(self, start_thread=False):
         """
@@ -371,7 +372,7 @@ class PiEnviro(object):
         """
         Query and return current pressure.
         """
-        return self._ureg.Quantity(self._sense_hat.get_pressure(), 'mbar')
+        return self._sense_hat.get_pressure() * 0.02953 # FIXME self._ureg.Quantity(self._sense_hat.get_pressure(), 'mbar')
 
     ####################################################################
 
