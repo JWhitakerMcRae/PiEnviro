@@ -71,8 +71,8 @@ RUN pip3 install -U \
     netifaces
 RUN pip3 install -U \
     Pint
-RUN pip3 install -U \
-    requests
+#RUN pip3 install -U \
+#    requests
 
 # Add user credentials
 RUN useradd -m "pienviro" && \

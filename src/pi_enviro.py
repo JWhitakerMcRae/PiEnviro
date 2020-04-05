@@ -6,8 +6,8 @@ from os.path import dirname, join
 from pint import UnitRegistry
 from pint.converters import ScaleConverter
 from pint.unit import UnitDefinition
-from requests import post
-from requests.exceptions import ConnectionError, MissingSchema
+#FIXME from requests import post
+#FIXME from requests.exceptions import ConnectionError, MissingSchema
 from sense_hat import SenseHat
 from threading import Thread
 from time import sleep
@@ -411,14 +411,15 @@ class PiEnviro(object):
         :param influxdb_config: String containing InfluxDB config
         filename, which should be located in /scripts directory.
         """
-        post_url = self.generate_influxdb_post_url(influxdb_config) # only need to generate this once
-        while True:
-            try:
-                post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
-                post_resp = post(post_url, data=post_data)
-            except (ConnectionError, MissingSchema):
-                print('{} Failed to post InfluxDB update to "env_data" series!'.format(str(datetime.now())))
-            sleep(self._post_influxdb_wait_sec)
+        pass #FIXME 
+        # FIXME post_url = self.generate_influxdb_post_url(influxdb_config) # only need to generate this once
+        #FIXME while True:
+        #FIXME     try:
+        #FIXME         post_data = 'env_data[{}] temp={},humidity={},press={}'.format(self._get_ipaddr(), self.get_temp(), self.get_humidity(), self.get_press())
+        #FIXME         post_resp = post(post_url, data=post_data)
+        #FIXME     except (ConnectionError, MissingSchema):
+        #FIXME         print('{} Failed to post InfluxDB update to "env_data" series!'.format(str(datetime.now())))
+        #FIXME     sleep(self._post_influxdb_wait_sec)
 
     def _get_ipaddr(self):
         """
