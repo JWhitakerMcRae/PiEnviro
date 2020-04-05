@@ -49,8 +49,8 @@ RUN apt-get update && apt-get -y install \
 # Install SenseHat utilities
 RUN apt-get install --reinstall \
     raspberrypi-bootloader
-CMD modprobe i2c-dev && apt-get update && apt-get -y install \
-    sense-hat
+#CMD modprobe i2c-dev && apt-get update && apt-get -y install \
+#    sense-hat
 
 # Install Bluetooth utilities
 #RUN apt-get update && apt-get -y install \

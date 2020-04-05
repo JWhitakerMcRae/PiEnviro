@@ -34,9 +34,9 @@ class PiEnviro(object):
               (255,0,255)]    # magenta / fuchsia
 
     screen_rotations = [0,    # power forward
-                        90,   # power left
+                        90,   # power right
                         180,  # power back
-                        270]  # power right
+                        270]  # power left
 
     # Scroll speeds (lower is faster)
     scroll_speeds = [0.15, 0.125, 0.1, 0.075, 0.05]
@@ -77,7 +77,7 @@ class PiEnviro(object):
         self._read_press_wait_sec = 15.0
         self._post_influxdb_wait_sec = 60.0
         # Initialize screen defaults
-        self._screen_rotation = screen_rotations[1]
+        self._screen_rotation = self.screen_rotations[3]
         self._screen_message = '' # This is set by _update_screen_message
         self._screen_speed_index = 2 # middle
         self._screen_speed = self.scroll_speeds[self._screen_speed_index]
@@ -271,9 +271,10 @@ class PiEnviro(object):
         Query and save current temperature.
         """
         self.curr_temp = self._read_temp()
-        print('Updated current temperature to {:.1f}'.format(self.curr_temp.to('degF')))
+        #FIXME print('Updated current temperature to {:.1f}'.format(self.curr_temp.to('degF')))
+        print('Updated current temperature to {:.1f}'.format(self.curr_temp))
 
-    def _read_temp(self, calibrate_temp=True):
+    def _read_temp(self, calibrate_temp=False): # FIXME: Calibrate should default to True
         """
         Query and return current temperature.
         :param calibrate_temp: If True will also query CPU temperature
@@ -366,7 +367,8 @@ class PiEnviro(object):
         Query and save current pressure.
         """
         self.curr_press = self._read_press()
-        print('Updated current pressure to {:.2f}'.format(self.curr_press.to('inHg')))
+        #FIXME print('Updated current pressure to {:.2f}'.format(self.curr_press.to('inHg')))
+        print('Updated current pressure to {:.2f}'.format(self.curr_press))
 
     def _read_press(self):
         """
