@@ -66,14 +66,9 @@ CMD modprobe i2c-dev && apt-get update && apt-get -y install \
 
 # Install remaining PiEnviro requirements
 RUN pip3 install -U \
-    flask
-RUN pip3 install -U \
-    netifaces
-RUN pip3 install -U \
-    Pint
-RUN pip3 install -U \
-    PyYAML
-RUN pip3 install -U \
+    flask \
+    netifaces \
+    Pint \
     requests
 
 # Add user credentials

@@ -11,7 +11,7 @@ from requests.exceptions import ConnectionError, MissingSchema
 from sense_hat import SenseHat
 from threading import Thread
 from time import sleep
-from yaml import load, YAMLError
+#FIXME from yaml import load, YAMLError
 
 # TODO: Remove InfluxDB stuff and put in separate class, which can call PiEnviro getters to post to database
 
@@ -382,16 +382,16 @@ class PiEnviro(object):
         filename, which should be located in /scripts directory.
         '''
         post_url=''
-        try:
-            with open(join(dirname(__file__), influxdb_config)) as config_file:
-                config = load(config_file) # expected: url, db -- optional: username, password
-                if 'username' in config and 'password' in config:
-                    post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
-                else: # no credentials needed
-                    post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
-        except (IOError, YAMLError) as err:
-            print('Could not create InfluxDB post url path, invalid config file ({})!'.format(influxdb_config))
-        print('Generated InfluxDB post url: {}'.format(post_url))
+        # FIXME try:
+        # FIXME     with open(join(dirname(__file__), influxdb_config)) as config_file:
+        # FIXME         config = load(config_file) # expected: url, db -- optional: username, password
+        # FIXME         if 'username' in config and 'password' in config:
+        # FIXME             post_url = '{url}/write?db={db}&u={username}&p={password}'.format(url=config['url'], db=config['db'], username=config['username'], password=config['password'])
+        # FIXME         else: # no credentials needed
+        # FIXME             post_url = '{url}/write?db={db}'.format(url=config['url'], db=config['db'])
+        # FIXME except (IOError, YAMLError) as err:
+        # FIXME     print('Could not create InfluxDB post url path, invalid config file ({})!'.format(influxdb_config))
+        # FIXME print('Generated InfluxDB post url: {}'.format(post_url))
         return post_url
 
     def _init_influxdb_thread(self, influxdb_config, start_thread=False):
@@ -439,6 +439,6 @@ class PiEnviro(object):
 
 
 if __name__ == '__main__':
-    pi = PiEnviro(influxdb_config='jwm_influxdb.yml') # initialize PiEnviro (using personal database)
+    pi = PiEnviro()
     pi.run()
     print('*** PiEnviro initialized! ***')
